@@ -1,0 +1,43 @@
+<head>
+</head>
+
+<body>
+  <table id="streamTable" class="">
+  </table>
+  <script>
+    const twitchClientId = 'lqq3sny2wehwymql2bri1j6cbq89pi';
+    //const xhr = new XMLHttpRequest();
+    //xhr.onreadystatechange = function() {
+    //  if (this.readyState == 4 && this.status == 200) {
+    //    document.getElementById("streamTable")
+    //      .innerHTML = '<h1>Hey there</h1>';
+    //  }
+    //};
+    //xhr.open("GET", "row.html", false);
+    //xhr.send();
+    const table = document.getElementById("streamTable");
+
+    const getTwitchStreams = async () => {
+      // put headers here for token
+      const streamParams = await fetch(
+          "https://api.twitch.tv/helix/streams?q=starcraft", {
+            headers: {
+              "Client-ID": twitchClientId
+            }
+          })
+        .then(function(response) {
+          return response.json();
+        });
+      renderStream(table, streamParams);
+    }
+
+    const renderStream = (table, streamParams) => {
+                                       debugger;
+      const row = table.insertRow(0);
+      row.innerHTML = `<h1>${streamParams.data[0].user_name}</h1>`;
+    }
+
+    getTwitchStreams();
+
+  </script>
+</body>
