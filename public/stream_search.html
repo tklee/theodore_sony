@@ -1,61 +1,72 @@
 <head>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-  <input id="search" label="search">search</input>
-  <table id="streamTable" class="">
-  </table>
-  <script>
-    const NUMBER_OF_STREAMS_PER_PAGE = 10;
-    const twitchClientId = 'lqq3sny2wehwymql2bri1j6cbq89pi';
-    let offset = 0;
+  <div class="main-container">
+    <div class="center-column">
+      <input id="search"></input>
+      <button id="searchButton">search</button>
+      <table id="streamTable" class="">
+      </table>
+      <script>
+        const NUMBER_OF_STREAMS_PER_PAGE = 10;
+        const twitchClientId = 'lqq3sny2wehwymql2bri1j6cbq89pi';
+        let offset = 0;
 
-    const constructUrl = (query, offset) => {
-      return `https://api.twitch.tv/kraken/search/streams?q=${query}&offset=${offset}`
-    }
-    const getTwitchStreams = async (query, offset) => {
-      const streamParams = await fetch(
-          constructUrl(query, offset), {
-            headers: {
-              "Client-ID": twitchClientId
-            }
-          })
-        .then(function(response) {
-          return response.json();
-        });
-      let totalStreams = streamParams._total;
-      offset += NUMBER_OF_STREAMS_PER_PAGE;
-      let nextLink = constructUrl(query, offset);
-      let baseOffset = offset - NUMBER_OF_STREAMS_PER_PAGE;
-      if (baseOffset < 0) baseOffset = 0;
-      let previousLink = constructUrl(query, offset -
-        NUMBER_OF_STREAMS_PER_PAGE);
-      table.innerHTML = "";
-      renderStream(table, streamParams);
-    }
-    const searchInput = document.getElementById("search");
-    //TODO(theo): add listener on keypress
-    searchInput.addEventListener("change", (function(e) {
-      getTwitchStreams(e.target.value, 0)
-    }));
-    const table = document.getElementById("streamTable");
+        const constructUrl = (query, offset) => {
+          return `https://api.twitch.tv/kraken/search/streams?q=${query}&offset=${offset}`
+        }
+        const getTwitchStreams = async (query, offset) => {
+          const streamParams = await fetch(
+              constructUrl(query, offset), {
+                headers: {
+                  "Client-ID": twitchClientId
+                }
+              })
+            .then(function(response) {
+              return response.json();
+            });
+          let totalStreams = streamParams._total;
+          offset += NUMBER_OF_STREAMS_PER_PAGE;
+          let nextLink = constructUrl(query, offset);
+          let baseOffset = offset - NUMBER_OF_STREAMS_PER_PAGE;
+          if (baseOffset < 0) baseOffset = 0;
+          let previousLink = constructUrl(query, offset -
+            NUMBER_OF_STREAMS_PER_PAGE);
+          table.innerHTML = "";
+          renderStream(table, streamParams);
+        }
+        const searchInput = document.getElementById("search");
+        //TODO(theo): add listener on keypress
+        searchInput.addEventListener("change", (function(e) {
+          if (!e.target.value || e.target.value == "") return;
+          getTwitchStreams(e.target.value, 0)
+        }));
+        const table = document.getElementById("streamTable");
 
-    const renderStream = (table, streamParams) => {
-      if (!streamParams.streams || streamParams.streams.length == 0) return;
-      streamParams.streams.forEach((stream, i) => {
-        const row = table.insertRow(i);
-        const displayName = streamParams.streams[i].channel.display_name;
-        row.innerHTML = row.innerHTML + `<h2>${displayName}</h2>`;
-        let thumbnailUrl = streamParams.streams[i].preview.small;
-        thumbnailUrl = thumbnailUrl.replace(/{width}/, '400');
-        thumbnailUrl = thumbnailUrl.replace(/{height}/, '225');
-        row.innerHTML = row.innerHTML + `<img src=${thumbnailUrl} />`;
-        const streamDescription = streamParams.streams[i].channel.status;
-        row.innerHTML = row.innerHTML + `<h3>${streamDescription}</h3>`;
-      });
-    }
+        const renderStream = (table, streamParams) => {
+          if (!streamParams.streams || streamParams.streams.length == 0)
+            return;
+          streamParams.streams.forEach((stream, i) => {
+            const row = table.insertRow(i);
+            const displayName = streamParams.streams[i].channel
+              .display_name;
+            row.innerHTML = row.innerHTML + `<h2>${displayName}</h2>`;
+            let thumbnailUrl = streamParams.streams[i].preview.small;
+            thumbnailUrl = thumbnailUrl.replace(/{width}/, '400');
+            thumbnailUrl = thumbnailUrl.replace(/{height}/, '225');
+            row.innerHTML = row.innerHTML + `<img src=${thumbnailUrl} />`;
+            const streamDescription = streamParams.streams[i].channel
+              .status;
+            row.innerHTML = row.innerHTML +
+              `<h3>${streamDescription}</h3>`;
+          });
+        }
 
-    getTwitchStreams();
+        getTwitchStreams();
 
-  </script>
+      </script>
+    </div>
+  </div>
 </body>
