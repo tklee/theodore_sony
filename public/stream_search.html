@@ -52,6 +52,7 @@
             const row = table.insertRow(i);
             const displayName = streamParams.streams[i].channel
               .display_name;
+            row.innerHTML = row.innerHTML + `<div class='row-container'>`;
             row.innerHTML = row.innerHTML + `<h2>${displayName}</h2>`;
             let thumbnailUrl = streamParams.streams[i].preview.small;
             thumbnailUrl = thumbnailUrl.replace(/{width}/, '400');
@@ -61,6 +62,7 @@
               .status;
             row.innerHTML = row.innerHTML +
               `<h3>${streamDescription}</h3>`;
+            row.innerHTML = row.innerHTML + `</div>`;
           });
         }
 
