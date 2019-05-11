@@ -2,6 +2,7 @@
 </head>
 
 <body>
+  <input id="search" label="search">search</input>
   <table id="streamTable" class="">
   </table>
   <script>
@@ -15,12 +16,11 @@
     //};
     //xhr.open("GET", "row.html", false);
     //xhr.send();
-    const table = document.getElementById("streamTable");
-
-    const getTwitchStreams = async () => {
+    const getTwitchStreams = async (query) => {
+      debugger;
       // put headers here for token
       const streamParams = await fetch(
-          "https://api.twitch.tv/helix/streams?q=starcraft", {
+          `https://api.twitch.tv/helix/streams?q=${query}`, {
             headers: {
               "Client-ID": twitchClientId
             }
@@ -30,9 +30,14 @@
         });
       renderStream(table, streamParams);
     }
+    const searchInput = document.getElementById("search");
+    //TODO(theo): add listener on keypress
+    searchInput.addEventListener("change", (function(e) {
+      getTwitchStreams(e.target.value)
+    }));
+    const table = document.getElementById("streamTable");
 
     const renderStream = (table, streamParams) => {
-                                       debugger;
       const row = table.insertRow(0);
       row.innerHTML = `<h1>${streamParams.data[0].user_name}</h1>`;
     }
