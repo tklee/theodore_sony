@@ -6,21 +6,16 @@
   <table id="streamTable" class="">
   </table>
   <script>
+    const NUMBER_OF_STREAMS_PER_PAGE = 10;
     const twitchClientId = 'lqq3sny2wehwymql2bri1j6cbq89pi';
-    //const xhr = new XMLHttpRequest();
-    //xhr.onreadystatechange = function() {
-    //  if (this.readyState == 4 && this.status == 200) {
-    //    document.getElementById("streamTable")
-    //      .innerHTML = '<h1>Hey there</h1>';
-    //  }
-    //};
-    //xhr.open("GET", "row.html", false);
-    //xhr.send();
-    const getTwitchStreams = async (query) => {
-      debugger;
-      // put headers here for token
+    let offset = 0;
+
+    const constructUrl = (query, offset) => {
+      return `https://api.twitch.tv/kraken/search/streams?q=${query}&offset=${offset}`
+    }
+    const getTwitchStreams = async (query, offset) => {
       const streamParams = await fetch(
-          `https://api.twitch.tv/kraken/search/streams?q=${query}`, {
+          constructUrl(query, offset), {
             headers: {
               "Client-ID": twitchClientId
             }
@@ -28,17 +23,26 @@
         .then(function(response) {
           return response.json();
         });
+      let totalStreams = streamParams._total;
+      offset += NUMBER_OF_STREAMS_PER_PAGE;
+      let nextLink = constructUrl(query, offset);
+      let baseOffset = offset - NUMBER_OF_STREAMS_PER_PAGE;
+      if (baseOffset < 0) baseOffset = 0;
+      let previousLink = constructUrl(query, offset -
+        NUMBER_OF_STREAMS_PER_PAGE);
+      table.innerHTML = "";
       renderStream(table, streamParams);
     }
     const searchInput = document.getElementById("search");
     //TODO(theo): add listener on keypress
     searchInput.addEventListener("change", (function(e) {
-      getTwitchStreams(e.target.value)
+      getTwitchStreams(e.target.value, 0)
     }));
     const table = document.getElementById("streamTable");
 
     const renderStream = (table, streamParams) => {
       const row = table.insertRow(0);
+      if (!streamParams.streams || streamParams.streams.length == 0) return;
       const displayName = streamParams.streams[0].channel.display_name;
       row.innerHTML = row.innerHTML + `<h2>${displayName}</h2>`;
       let thumbnailUrl = streamParams.streams[0].preview.small;
