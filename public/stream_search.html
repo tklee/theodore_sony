@@ -40,6 +40,10 @@
     const renderStream = (table, streamParams) => {
       const row = table.insertRow(0);
       row.innerHTML = `<h1>${streamParams.data[0].user_name}</h1>`;
+      let thumbnailUrl = streamParams.data[0].thumbnail_url;
+      thumbnailUrl = thumbnailUrl.replace(/{width}/, '400');
+      thumbnailUrl = thumbnailUrl.replace(/{height}/, '225');
+      row.innerHTML = row.innerHTML + `<img src=${thumbnailUrl} />`;
     }
 
     getTwitchStreams();
