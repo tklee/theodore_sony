@@ -52,17 +52,18 @@
             const row = table.insertRow(i);
             const displayName = streamParams.streams[i].channel
               .display_name;
-            row.innerHTML = row.innerHTML + `<div class='row-container'>`;
-            row.innerHTML = row.innerHTML + `<h2>${displayName}</h2>`;
+            const child = document.createElement("div");
+            row.className = "row-container";
+            row.appendChild(child);
+            child.innerHTML = child.innerHTML + `<h2>${displayName}</h2>`;
             let thumbnailUrl = streamParams.streams[i].preview.small;
             thumbnailUrl = thumbnailUrl.replace(/{width}/, '400');
             thumbnailUrl = thumbnailUrl.replace(/{height}/, '225');
-            row.innerHTML = row.innerHTML + `<img src=${thumbnailUrl} />`;
+            child.innerHTML = child.innerHTML + `<img src=${thumbnailUrl} />`;
             const streamDescription = streamParams.streams[i].channel
               .status;
-            row.innerHTML = row.innerHTML +
+            child.innerHTML = child.innerHTML +
               `<h3>${streamDescription}</h3>`;
-            row.innerHTML = row.innerHTML + `</div>`;
           });
         }
 
