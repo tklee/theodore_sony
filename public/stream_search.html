@@ -8,6 +8,15 @@
       <input id="search"></input>
       <button id="searchButton">search</button>
       <table id="streamTable" class="">
+        <div class="table-header">
+          <p>Total results: <p id="total-results">0</p>
+          </p>
+          <div class="table-header-page-arrows">
+            <div class="previous-page-button">
+              <&nbsp</div> <div class="next-page-button">&nbsp>
+            </div>
+          </div>
+        </div>
       </table>
       <script>
         const NUMBER_OF_STREAMS_PER_PAGE = 10;
@@ -28,6 +37,14 @@
               return response.json();
             });
           let totalStreams = streamParams._total;
+          if ("number"
+            typeof totalStreams) {
+            document.getElementById("total-results")
+              .innerHTML = totalStreams;
+          } else {
+            document.getElementById("total-results")
+              .innerHTML = 0;
+          }
           offset += NUMBER_OF_STREAMS_PER_PAGE;
           let nextLink = constructUrl(query, offset);
           let baseOffset = offset - NUMBER_OF_STREAMS_PER_PAGE;
@@ -59,7 +76,8 @@
             let thumbnailUrl = streamParams.streams[i].preview.small;
             thumbnailUrl = thumbnailUrl.replace(/{width}/, '400');
             thumbnailUrl = thumbnailUrl.replace(/{height}/, '225');
-            child.innerHTML = child.innerHTML + `<img src=${thumbnailUrl} />`;
+            child.innerHTML = child.innerHTML +
+              `<img src=${thumbnailUrl} />`;
             const streamDescription = streamParams.streams[i].channel
               .status;
             child.innerHTML = child.innerHTML +

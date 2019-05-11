@@ -18,3 +18,15 @@
   align-items: center;
   justify-content: center;
 }
+
+.table-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.table-header-page-arrows {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
