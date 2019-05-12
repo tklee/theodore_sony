@@ -29,7 +29,6 @@
           return `https://api.twitch.tv/kraken/search/streams?query=${query}&offset=${offset}`
         }
         const getTwitchStreams = async (query, offset) => {
-         debugger;
           const streamParams = await fetch(
               constructUrl(query, offset), {
                 headers: {
@@ -42,14 +41,20 @@
           let totalStreams = streamParams._total;
           const previousButton = document.getElementById(
             "previous-page-button");
-          previousButton.addEventListener("click", (function(e) {
+          // get rid of any old event listeners
+          const newPreviousButton = previousButton.cloneNode(true);
+          previousButton.parentNode.replaceChild(newPreviousButton,
+            previousButton);
+          newPreviousButton.addEventListener("click", (function(e) {
             let baseOffset = offset - NUMBER_OF_STREAMS_PER_PAGE;
             if (baseOffset < 0) baseOffset = 0;
             getTwitchStreams(searchInput.innerHTML, baseOffset)
           }));
           const nextButton = document.getElementById("next-page-button");
-          nextButton.addEventListener("click", (function(e) {
-                            debugger;
+          const newNextButton = nextButton.cloneNode(true);
+          nextButton.parentNode.replaceChild(newNextButton,
+            nextButton);
+          newNextButton.addEventListener("click", (function(e) {
             let baseOffset = offset + NUMBER_OF_STREAMS_PER_PAGE;
             if (baseOffset > totalStreams) baseOffset = totalStreams -
               NUMBER_OF_STREAMS_PER_PAGE;
