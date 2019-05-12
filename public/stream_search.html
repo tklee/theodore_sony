@@ -12,8 +12,9 @@
           <p>Total results: <p id="total-results">0</p>
           </p>
           <div class="table-header-page-arrows">
-            <div class="previous-page-button">
-              <&nbsp</div> <div class="next-page-button">&nbsp>
+            <div id="previous-page-button" class="previous-page-button">
+              <&nbsp</div> <div id="next-page-button" class="next-page-button">
+                &nbsp>
             </div>
           </div>
         </div>
@@ -24,9 +25,11 @@
         let offset = 0;
 
         const constructUrl = (query, offset) => {
-          return `https://api.twitch.tv/kraken/search/streams?q=${query}&offset=${offset}`
+          if (!query || query == "") query = '""';
+          return `https://api.twitch.tv/kraken/search/streams?query=${query}&offset=${offset}`
         }
         const getTwitchStreams = async (query, offset) => {
+         debugger;
           const streamParams = await fetch(
               constructUrl(query, offset), {
                 headers: {
@@ -37,27 +40,34 @@
               return response.json();
             });
           let totalStreams = streamParams._total;
-          if ("number"
-            typeof totalStreams) {
+          const previousButton = document.getElementById(
+            "previous-page-button");
+          previousButton.addEventListener("click", (function(e) {
+            let baseOffset = offset - NUMBER_OF_STREAMS_PER_PAGE;
+            if (baseOffset < 0) baseOffset = 0;
+            getTwitchStreams(searchInput.innerHTML, baseOffset)
+          }));
+          const nextButton = document.getElementById("next-page-button");
+          nextButton.addEventListener("click", (function(e) {
+                            debugger;
+            let baseOffset = offset + NUMBER_OF_STREAMS_PER_PAGE;
+            if (baseOffset > totalStreams) baseOffset = totalStreams -
+              NUMBER_OF_STREAMS_PER_PAGE;
+            getTwitchStreams(searchInput.innerHTML, baseOffset)
+          }));
+          if (typeof totalStreams === "number") {
             document.getElementById("total-results")
               .innerHTML = totalStreams;
           } else {
             document.getElementById("total-results")
               .innerHTML = 0;
           }
-          offset += NUMBER_OF_STREAMS_PER_PAGE;
-          let nextLink = constructUrl(query, offset);
-          let baseOffset = offset - NUMBER_OF_STREAMS_PER_PAGE;
-          if (baseOffset < 0) baseOffset = 0;
-          let previousLink = constructUrl(query, offset -
-            NUMBER_OF_STREAMS_PER_PAGE);
           table.innerHTML = "";
           renderStream(table, streamParams);
         }
         const searchInput = document.getElementById("search");
         //TODO(theo): add listener on keypress
         searchInput.addEventListener("change", (function(e) {
-          if (!e.target.value || e.target.value == "") return;
           getTwitchStreams(e.target.value, 0)
         }));
         const table = document.getElementById("streamTable");
@@ -85,7 +95,7 @@
           });
         }
 
-        getTwitchStreams();
+        getTwitchStreams(null, 0);
 
       </script>
     </div>
