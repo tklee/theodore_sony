@@ -48,7 +48,7 @@
           newPreviousButton.addEventListener("click", (function(e) {
             let baseOffset = offset - NUMBER_OF_STREAMS_PER_PAGE;
             if (baseOffset < 0) baseOffset = 0;
-            getTwitchStreams(searchInput.innerHTML, baseOffset)
+            getTwitchStreams(searchInput.value, baseOffset)
           }));
           const nextButton = document.getElementById("next-page-button");
           const newNextButton = nextButton.cloneNode(true);
@@ -58,7 +58,8 @@
             let baseOffset = offset + NUMBER_OF_STREAMS_PER_PAGE;
             if (baseOffset > totalStreams) baseOffset = totalStreams -
               NUMBER_OF_STREAMS_PER_PAGE;
-            getTwitchStreams(searchInput.innerHTML, baseOffset)
+                            debugger;
+            getTwitchStreams(searchInput.value, baseOffset)
           }));
           if (typeof totalStreams === "number") {
             document.getElementById("total-results")
