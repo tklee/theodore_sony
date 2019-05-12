@@ -58,7 +58,6 @@
             let baseOffset = offset + NUMBER_OF_STREAMS_PER_PAGE;
             if (baseOffset > totalStreams) baseOffset = totalStreams -
               NUMBER_OF_STREAMS_PER_PAGE;
-                            debugger;
             getTwitchStreams(searchInput.value, baseOffset)
           }));
           if (typeof totalStreams === "number") {
