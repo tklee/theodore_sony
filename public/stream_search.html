@@ -5,8 +5,10 @@
 <body>
   <div class="main-container">
     <div class="center-column">
-      <input id="search"></input>
-      <button id="searchButton">search</button>
+      <div class="search-container">
+        <input id="search" class="search-input"></input>
+        <button id="searchButton">search</button>
+      </div>
       <table id="streamTable" class="">
         <div class="table-header">
           <p>Total results: <p id="total-results">0</p>
@@ -85,18 +87,25 @@
             const displayName = streamParams.streams[i].channel
               .display_name;
             const child = document.createElement("div");
+            child.className = "row-column-container";
             row.className = "row-container";
-            row.appendChild(child);
-            child.innerHTML = child.innerHTML + `<h2>${displayName}</h2>`;
-            let thumbnailUrl = streamParams.streams[i].preview.small;
-            thumbnailUrl = thumbnailUrl.replace(/{width}/, '400');
-            thumbnailUrl = thumbnailUrl.replace(/{height}/, '225');
-            child.innerHTML = child.innerHTML +
+            let thumbnailUrl = streamParams.streams[i].preview.medium;
+            thumbnailUrl = thumbnailUrl.replace(/{width}/, '800');
+            thumbnailUrl = thumbnailUrl.replace(/{height}/, '450');
+            row.innerHTML = row.innerHTML +
               `<img src=${thumbnailUrl} />`;
+            row.appendChild(child);
+            child.innerHTML = child.innerHTML + `<h2 class="display-name">${displayName}</h2>`;
+
+            const gameName = streamParams.streams[i].game;
+            const viewers = streamParams.streams[i].viewers;
+            child.innerHTML = child.innerHTML +
+              `<p class="stream-description">${gameName} - ${viewers} viewers</p>`;
+
             const streamDescription = streamParams.streams[i].channel
               .status;
             child.innerHTML = child.innerHTML +
-              `<h3>${streamDescription}</h3>`;
+              `<p class="stream-description">${streamDescription}</p>`;
           });
         }
 
