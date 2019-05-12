@@ -15,7 +15,7 @@
           </p>
           <div class="table-header-page-arrows">
             <div id="previous-page-button" class="previous-page-button">
-              <&nbsp</div> <div id="next-page-button" class="next-page-button">
+              <&nbsp</div><div id="page-counter">1</div> <div id="next-page-button" class="next-page-button">
                 &nbsp>
             </div>
           </div>
@@ -41,6 +41,8 @@
               return response.json();
             });
           let totalStreams = streamParams._total;
+          let pageCounter = document.getElementById("page-counter");
+       pageCounter.innerHTML = `${ Math.floor(offset/10) + 1 } / ${ Math.floor(totalStreams/10) + 1 }`;
           const previousButton = document.getElementById(
             "previous-page-button");
           // get rid of any old event listeners
