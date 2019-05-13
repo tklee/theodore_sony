@@ -15,8 +15,10 @@
           </p>
           <div class="table-header-page-arrows">
             <div id="previous-page-button" class="previous-page-button">
-              <&nbsp</div><div id="page-counter">1</div> <div id="next-page-button" class="next-page-button">
-                &nbsp>
+              <&nbsp</div> <div id="page-counter">1
+            </div>
+            <div id="next-page-button" class="next-page-button">
+              &nbsp>
             </div>
           </div>
         </div>
@@ -42,7 +44,8 @@
             });
           let totalStreams = streamParams._total;
           let pageCounter = document.getElementById("page-counter");
-       pageCounter.innerHTML = `${ Math.floor(offset/10) + 1 } / ${ Math.floor(totalStreams/10) + 1 }`;
+          pageCounter.innerHTML =
+            `${ Math.floor(offset/10) + 1 } / ${ Math.floor(totalStreams/10) + 1 }`;
           const previousButton = document.getElementById(
             "previous-page-button");
           // get rid of any old event listeners
@@ -91,13 +94,17 @@
             const child = document.createElement("div");
             child.className = "row-column-container";
             row.className = "row-container";
+            row.addEventListener("click", function(e) {
+              window.location.replace(`${stream.channel.url}`);
+            });
             let thumbnailUrl = streamParams.streams[i].preview.medium;
             thumbnailUrl = thumbnailUrl.replace(/{width}/, '800');
             thumbnailUrl = thumbnailUrl.replace(/{height}/, '450');
             row.innerHTML = row.innerHTML +
               `<img src=${thumbnailUrl} />`;
             row.appendChild(child);
-            child.innerHTML = child.innerHTML + `<h2 class="display-name">${displayName}</h2>`;
+            child.innerHTML = child.innerHTML +
+              `<h2 class="display-name">${displayName}</h2>`;
 
             const gameName = streamParams.streams[i].game;
             const viewers = streamParams.streams[i].viewers;

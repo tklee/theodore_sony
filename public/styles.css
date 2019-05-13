@@ -27,6 +27,7 @@ body {
   padding-right: 30px;
   margin-top: 13px;
   margin-bottom: 13px;
+  cursor: pointer;
 }
 
 .row-column-container {
