@@ -95,7 +95,7 @@
             child.className = "row-column-container";
             row.className = "row-container";
             row.addEventListener("click", function(e) {
-              window.location.replace(`${stream.channel.url}`);
+              window.location.assign(`${stream.channel.url}`);
             });
             let thumbnailUrl = streamParams.streams[i].preview.medium;
             thumbnailUrl = thumbnailUrl.replace(/{width}/, '800');
